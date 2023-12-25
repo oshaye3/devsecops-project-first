@@ -3,6 +3,10 @@ pipeline {
     tools { 
         maven 'maven-3.9.6' 
     }
+        environment {
+        // Replace with the actual path to your JDK installation
+        JAVA_HOME = '/usr/local/opt/openjdk@8'
+    }
     stages {
         stage('Checkout git') {
             steps {
@@ -10,12 +14,13 @@ pipeline {
             }
         }
 
-        stage('Pre-Build') {
-    steps {
-        sh 'echo $JAVA_HOME'
-        sh 'javac -version'
-    }
-}
+   stage('Pre-Build') {
+            steps {
+                sh 'export JAVA_HOME'
+                sh 'echo $JAVA_HOME'
+                sh 'javac -version'
+            }
+        }
         
         stage ('Build & JUnit Test') {
             steps {
