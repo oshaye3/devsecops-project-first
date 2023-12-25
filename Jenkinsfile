@@ -23,11 +23,12 @@ pipeline {
         stage('SonarQube Analysis'){
             steps{
                 withSonarQubeEnv('SonarQube-server') {
-                        sh 'mvn clean verify sonar:sonar \
+                        sh "mvn clean verify sonar:sonar \
                            -Dsonar.projectKey=devsecops \
                            -Dsonar.projectName='devsecops' \
                            -Dsonar.host.url=http://localhost:9000 \
-                           -Dsonar.token=sqp_9546ab703ac21465aefa703a6cc4f400b3a9a374'
+                           -Dsonar.token=sqp_9546ab703ac21465aefa703a6cc4f400b3a9a374"
+
                 }
             }
         }
