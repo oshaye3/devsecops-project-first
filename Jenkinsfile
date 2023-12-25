@@ -1,7 +1,7 @@
 pipeline {
     agent any
     tools { 
-        maven 'maven-3.8.6' 
+        maven 'maven-3.9.6' 
     }
     stages {
         stage('Checkout git') {
@@ -9,6 +9,13 @@ pipeline {
                git branch: 'master', url: 'https://github.com/oshaye3/devsecops-project-first'
             }
         }
+
+        stage('Pre-Build') {
+    steps {
+        sh 'echo $JAVA_HOME'
+        sh 'javac -version'
+    }
+}
         
         stage ('Build & JUnit Test') {
             steps {
