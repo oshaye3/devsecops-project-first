@@ -71,7 +71,7 @@ pipeline {
          }
         stage('Docker  Push') {
             steps {
-                withVault(configuration: [skipSslVerification: true, timeout: 60, vaultCredentialId: 'vault-cred', vaultUrl: 'http://your-vault-server-ip:8200'], vaultSecrets: [[path: 'secrets/creds/docker', secretValues: [[vaultKey: 'username'], [vaultKey: 'password']]]]) {
+                withVault(configuration: [skipSslVerification: true, timeout: 60, vaultCredentialId: 'vault-cred', vaultUrl: 'http://127.0.0.1:8200'], vaultSecrets: [[path: 'secrets/creds/docker', secretValues: [[vaultKey: 'username'], [vaultKey: 'password']]]]) {
                     sh '${DOCKER_PATH} login -u ${username} -p ${password} '
                     sh '${DOCKER_PATH} push moshaye/sprint-boot-app:v1.$BUILD_ID'
                     sh '${DOCKER_PATH} push moshaye/sprint-boot-app:latest'
