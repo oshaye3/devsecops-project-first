@@ -71,7 +71,7 @@ pipeline {
          }
 
 
-        stage('Docker  Push') {
+        stage('Docker Push') {
             steps {
                   withVault(configuration: [skipSslVerification: true, timeout: 60, vaultCredentialId: 'vault-username-password', vaultUrl: 'http://127.0.0.1:8200'], vaultSecrets: [[path: 'secrets/creds/docker', secretValues: [[vaultKey: 'username'], [vaultKey: 'password']]]]) {
                  sh "${DOCKER_PATH} login -u ${username} -p ${password}"
