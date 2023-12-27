@@ -30,33 +30,42 @@ pipeline {
                   sh 'checkov --version'    
             }
         }   
-        stage ('Build & JUnit Test') {
+stage('Build & JUnit Test') {
             steps {
-                sh 'mvn install' 
+                // Run 'mvn verify' instead of 'mvn install' to include tests without installing the package
+                // The 'verify' phase in Maven lifecycle ensures that unit tests are run and JaCoCo report is generated
+                sh 'mvn clean verify'
             }
             post {
-               success {
+                success {
+                    // Publish JUnit test results
                     junit 'target/surefire-reports/**/*.xml'
-                }   
-            }
-        }
-        stage('SonarQube Analysis'){
-            steps{
-                withSonarQubeEnv('sonarqube-server') {
-                        sh "mvn clean verify sonar:sonar \
-                           -Dsonar.projectKey=devsecops \
-                           -Dsonar.projectName='devsecops' \
-                           -Dsonar.host.url=http://localhost:9000 \
-                           -Dsonar.token=sqp_9546ab703ac21465aefa703a6cc4f400b3a9a374"
-
+                    // Publish JaCoCo coverage report
+                    jacoco(execPattern: 'target/jacoco.exec')
                 }
             }
         }
+
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('sonarqube-server') {
+                    // Running SonarQube analysis
+                    // No need to run 'mvn clean verify' again, just 'sonar:sonar' is sufficient
+                    // The SonarQube scanner will pick up the JaCoCo report from the previous stage
+                    sh "mvn sonar:sonar \
+                        -Dsonar.projectKey=devsecops \
+                        -Dsonar.projectName='devsecops' \
+                        -Dsonar.host.url=http://localhost:9000 \
+                        -Dsonar.login=sqp_9546ab703ac21465aefa703a6cc4f400b3a9a374"
+                }
+            }
+        }
+
         stage("Quality Gate") {
             steps {
-              timeout(time: 10, unit: 'MINUTES') {
-                waitForQualityGate abortPipeline: true
-              }
+                timeout(time: 10, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
             }
         }
         
