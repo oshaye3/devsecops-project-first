@@ -5,7 +5,7 @@ pipeline {
     }
         environment {
         // Replace with the actual path to your JDK installation
-        JAVA_HOME = '/usr/local/opt/openjdk@11'
+        JAVA_HOME = '/usr/local/opt/openjdk@21'
     }
     stages {
         stage('Checkout git') {
