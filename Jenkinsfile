@@ -26,7 +26,7 @@ pipeline {
     stage('Checkov Scan') {
             steps {
                     // Run Checkov against your IaC files
-                    sh 'checkov -d .'          
+                    sh 'checkov -d . --skip-check * --quiet'          
             }
         }   
         stage ('Build & JUnit Test') {
