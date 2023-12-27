@@ -6,6 +6,7 @@ pipeline {
         environment {
         // Replace with the actual path to your JDK installation
         JAVA_HOME = '/usr/local/opt/openjdk@21'
+        DOCKER_PATH = "/usr/local/bin/docker"
     }
     stages {
         stage('Checkout git') {
@@ -54,8 +55,8 @@ pipeline {
         
         stage('Docker  Build') {
             steps {
-      	        sh 'docker build -t moshaye/sprint-boot-app:v1.$BUILD_ID .'
-                sh 'docker image tag moshaye/sprint-boot-app:v1.$BUILD_ID moshaye/sprint-boot-app:latest'
+                    sh '${DOCKER_PATH} build -t moshaye/sprint-boot-app:v1.$BUILD_ID .'
+                    sh '${DOCKER_PATH} image tag moshaye/sprint-boot-app:v1.$BUILD_ID moshaye/sprint-boot-app:latest'
             }
         }
         stage('Image Scan') {
