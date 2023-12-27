@@ -69,16 +69,15 @@ pipeline {
                   sh 'aws s3 cp report.html s3://michael-catalyst'
               }
          }
+
+
         stage('Docker  Push') {
             steps {
-                withVault(configuration: [skipSslVerification: true, timeout: 60, vaultCredentialId: 'vault-username-password', vaultUrl: 'http://127.0.0.1:8200'], vaultSecrets: [[path: 'secrets/creds/docker', secretValues: [[vaultKey: 'username', envVar: 'DOCKER_USERNAME'], [vaultKey: 'password', envVar: 'DOCKER_PASSWORD']]]]) {
-                   sh 'echo $DOCKER_USERNAME' // Use variables in your commands
-                    sh 'echo $DOCKER_PASSWORD'
-                    sh 'echo ${DOCKER_PATH}'
-                    sh "${DOCKER_PATH}  login -u ${env.DOCKER_USERNAME} -p ${env.DOCKER_PASSWORD}"
-                    sh "${DOCKER_PATH}  push moshaye/sprint-boot-app:v1.${BUILD_ID}"
-                    sh "${DOCKER_PATH}  push moshaye/sprint-boot-app:latest"
-                    sh "${DOCKER_PATH}  rmi moshaye/sprint-boot-app:v1.${BUILD_ID} moshaye/sprint-boot-app:latest"
+   withVault(configuration: [skipSslVerification: true, timeout: 60, vaultCredentialId:   'vault-username-password', vaultUrl: 'http://127.0.0.1:8200'], vaultSecrets: [[path: 'secrets/creds/docker', secretValues: [[vaultKey: 'username'], [vaultKey: 'password']]]]) {
+                 sh "${DOCKER_PATH} login -u ${username} -p ${password} "
+                 sh '${DOCKER_PATH} push praveensirvi/sprint-boot-app:v1.$BUILD_ID'
+                  sh '${DOCKER_PATH} push praveensirvi/sprint-boot-app:latest'
+                    sh '${DOCKER_PATH}  rmi moshaye/sprint-boot-app:v1.${BUILD_ID} moshaye/sprint-boot-app:latest'
                 }
             }
         }
