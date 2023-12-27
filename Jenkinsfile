@@ -22,7 +22,13 @@ pipeline {
                 sh 'javac -version'
             }
         }
-        
+
+    stage('Checkov Scan') {
+            steps {
+                    // Run Checkov against your IaC files
+                    sh 'checkov -d .'          
+            }
+        }   
         stage ('Build & JUnit Test') {
             steps {
                 sh 'mvn install' 
