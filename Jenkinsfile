@@ -103,7 +103,7 @@ pipeline {
         stage('Deploy to k8s') {
             steps {
                 script{
-                    kubernetesDeploy configs: 'spring-boot-deployment.yaml', kubeconfigId: 'kubernetes'
+                    kubernetesDeploy configs: 'spring-boot-deployment.yaml', kubeconfigId: 'kube-jenkins'
                 }
             }
         }
