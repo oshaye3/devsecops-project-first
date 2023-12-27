@@ -71,11 +71,11 @@ pipeline {
          }
         stage('Docker  Push') {
             steps {
-                withVault(configuration: [skipSslVerification: true, timeout: 60, vaultCredentialId: 'vault-username-password', vaultUrl: 'http://127.0.0.1:8200'], vaultSecrets: [[path: 'secrets/creds/docker', secretValues: [[vaultKey: 'username'], [vaultKey: 'password']]]]) {
-                    sh "${env.DOCKER_PATH} login -u ${env.username} -p ${env.password}"
-                    sh '${DOCKER_PATH} push moshaye/sprint-boot-app:v1.$BUILD_ID'
-                    sh '${DOCKER_PATH} push moshaye/sprint-boot-app:latest'
-                    sh '${DOCKER_PATH} rmi moshaye/sprint-boot-app:v1.$BUILD_ID moshaye/sprint-boot-app:latest'
+                withVault(configuration: [skipSslVerification: true, timeout: 60, vaultCredentialId: 'vault-username-password', vaultUrl: 'http://127.0.0.1:8200'], vaultSecrets: [[path: 'secrets/creds/docker', secretValues: [[vaultKey: 'username', envVar: 'DOCKER_USERNAME'], [vaultKey: 'password', envVar: 'DOCKER_PASSWORD']]]]) {
+                    sh "${env.DOCKER_PATH} login -u ${env.DOCKER_USERNAME} -p ${env.DOCKER_PASSWORD}"
+                    sh "${env.DOCKER_PATH} push moshaye/sprint-boot-app:v1.${BUILD_ID}"
+                    sh "${env.DOCKER_PATH} push moshaye/sprint-boot-app:latest"
+                    sh "${env.DOCKER_PATH} rmi moshaye/sprint-boot-app:v1.${BUILD_ID} moshaye/sprint-boot-app:latest"
                 }
             }
         }
