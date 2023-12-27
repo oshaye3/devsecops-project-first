@@ -70,14 +70,33 @@ pipeline {
               }
          }
 
-
         stage('Docker Push') {
             steps {
-                  withVault(configuration: [skipSslVerification: true, timeout: 60, vaultCredentialId: 'd1bb3fcc-691b-44e8-9b95-ee48b7dc1547', vaultUrl: 'http://127.0.0.1:8200'], vaultSecrets: [[path: 'secrets/creds/docker', secretValues: [[vaultKey: 'username'], [vaultKey: 'password']]]]) {
-                 sh "${DOCKER_PATH} login -u ${username} -p ${password}"
-                 sh '${DOCKER_PATH} push praveensirvi/sprint-boot-app:v1.$BUILD_ID'
-                  sh '${DOCKER_PATH} push praveensirvi/sprint-boot-app:latest'
-                    sh '${DOCKER_PATH}  rmi moshaye/sprint-boot-app:v1.${BUILD_ID} moshaye/sprint-boot-app:latest'
+                withVault(
+                    configuration: [
+                        skipSslVerification: true, 
+                        timeout: 60, 
+                        vaultCredentialId: 'd1bb3fcc-691b-44e8-9b95-ee48b7dc1547', 
+                        vaultUrl: 'http://127.0.0.1:8200',
+                        engineVersion: 1
+                    ], 
+                    vaultSecrets: [
+                        [
+                            path: 'secrets/creds/docker', 
+                            secretValues: [
+                                [envVar: 'DOCKER_USERNAME', vaultKey: 'username'], 
+                                [envVar: 'DOCKER_PASSWORD', vaultKey: 'password']
+                            ]
+                        ]
+                    ]
+                ) {
+                    // Ensure the environment variables are referenced correctly
+                    sh "${env.DOCKER_PATH} login -u ${env.DOCKER_USERNAME} -p ${env.DOCKER_PASSWORD}"
+                    sh "${env.DOCKER_PATH} push moshaye/sprint-boot-app:v1.${BUILD_ID}"
+                    sh "${env.DOCKER_PATH} push moshaye/sprint-boot-app:latest"
+                    // Also ensure you are removing the correct images
+                    sh "${env.DOCKER_PATH} rmi moshaye/sprint-boot-app:v1.${BUILD_ID}"
+                    sh "${env.DOCKER_PATH} rmi moshaye/sprint-boot-app:latest"
                 }
             }
         }
