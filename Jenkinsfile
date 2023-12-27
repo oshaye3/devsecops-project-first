@@ -61,7 +61,7 @@ pipeline {
         }
         stage('Image Scan') {
             steps {
-      	            sh '/usr/local/bin/trivy image --timeout 15m0s  --format template --template "@/usr/local/share/trivy/templates/html.tpl" -o report.html moshaye/sprint-boot-app:latest'
+      	            sh '/usr/local/bin/trivy image --timeout 15m0s  --format template --template "@/usr/local/bin/html.tpl" -o report.html moshaye/sprint-boot-app:latest'
             }
         }
         stage('Upload Scan report to AWS S3') {
