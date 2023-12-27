@@ -7,6 +7,7 @@ pipeline {
         // Replace with the actual path to your JDK installation
         JAVA_HOME = '/usr/local/opt/openjdk@21'
         DOCKER_PATH = "/usr/local/bin/docker"
+        PATH = "/usr/local/bin:$PATH"
     }
     stages {
         stage('Checkout git') {
