@@ -73,7 +73,7 @@ pipeline {
 
         stage('Docker Push') {
             steps {
-                  withVault(configuration: [skipSslVerification: true, timeout: 60, vaultCredentialId: 'vault-username-password', vaultUrl: 'http://127.0.0.1:8200'], vaultSecrets: [[path: 'secrets/creds/docker', secretValues: [[vaultKey: 'username'], [vaultKey: 'password']]]]) {
+                  withVault(configuration: [skipSslVerification: true, timeout: 60, vaultCredentialId: 'd1bb3fcc-691b-44e8-9b95-ee48b7dc1547', vaultUrl: 'http://127.0.0.1:8200'], vaultSecrets: [[path: 'secrets/creds/docker', secretValues: [[vaultKey: 'username'], [vaultKey: 'password']]]]) {
                  sh "${DOCKER_PATH} login -u ${username} -p ${password}"
                  sh '${DOCKER_PATH} push praveensirvi/sprint-boot-app:v1.$BUILD_ID'
                   sh '${DOCKER_PATH} push praveensirvi/sprint-boot-app:latest'
