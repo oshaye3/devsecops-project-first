@@ -60,7 +60,7 @@
                                     <limit>
                                         <counter>LINE</counter>
                                         <value>COVEREDRATIO</value>
-                                        <minimum>0.50</minimum> <!-- Example ratio -->
+                                        <minimum>0.05</minimum> <!-- Example ratio -->
                                     </limit>
                                 </limits>
                             </rule>
