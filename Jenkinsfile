@@ -29,7 +29,35 @@ pipeline {
                   //  sh 'checkov -d . --skip-check * --quiet'       
                   sh 'checkov --version'    
             }
-        }   
+        } 
+
+        stage('OWASP Dependency Check') {
+    steps {
+        script {
+    try {
+        // Check if the OWASP Dependency-Check tool is installed via Jenkins Global Tool Configuration
+        def owaspTool = tool name: 'OWASP-Dependency-Check', type: 'DependencyCheckInstallation'
+        echo "Using OWASP Dependency-Check tool at ${owaspTool}"
+
+        // Run the OWASP Dependency-Check using the configured tool in Jenkins
+        dependencyCheck additionalArguments: '--format HTML --format XML', odcInstallation: 'OWASP-Dependency-Check'
+    } catch (Exception e) {
+        echo "OWASP Dependency-Check tool not configured in Jenkins, using fallback."
+        def dependencyCheckPath = '/usr/local/bin/dependency-check'
+        if (fileExists(dependencyCheckPath)) {
+            // Run the OWASP Dependency-Check with additional arguments
+            sh "${dependencyCheckPath} --project 'devsecops-app' --scan './' --out . --format 'HTML' --format 'XML'"
+        } else {
+            error "OWASP Dependency-Check binary not found at ${dependencyCheckPath}"
+        }
+    }
+ }
+
+ }
+        
+    }
+
+
 stage('Build & JUnit Test') {
             steps {
                 // Run 'mvn verify' instead of 'mvn install' to include tests without installing the package
@@ -46,25 +74,7 @@ stage('Build & JUnit Test') {
             }
         }
 
-stage('OWASP Dependency Check') {
-    steps {
-        script {
-            // Check if the OWASP Dependency-Check tool is installed via Jenkins Global Tool Configuration
-            def isOwaspToolConfigured = tool name: 'OWASP-Dependency-Check', type: 'DependencyCheckInstallation'
 
-            // If it's configured, use it
-            if (isOwaspToolConfigured) {
-                // Run the OWASP Dependency-Check using the configured tool in Jenkins
-                dependencyCheck additionalArguments: '--format HTML --format XML', odcInstallation: 'OWASP-Dependency-Check'
-            } else {
-                // Otherwise, use the direct shell command
-                def dependencyCheckPath = '/usr/local/bin/dependency-check'
-                // Run the OWASP Dependency-Check with additional arguments
-                sh "${dependencyCheckPath} --project 'devsecops-app' --scan './' --out . --format 'HTML' --format 'XML'"
-            }
-        }
-    }
-}
 
         stage('SonarQube Analysis') {
             steps {
