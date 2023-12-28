@@ -49,7 +49,7 @@ stage('Build & JUnit Test') {
                 stage('OWASP Dependency Check') {
             steps {
                 // Run the OWASP Dependency-Check
-                dependencyCheck additionalArguments: '--format HTML --format XML', odcInstallation: 'default'
+                dependencyCheck additionalArguments: '--format HTML --format XML', odcInstallation: 'owasp-default'
             }
         }
 
