@@ -79,16 +79,15 @@ stage('Build & JUnit Test') {
         stage('Image Scan') {
             steps {
                 // Disables secret scanning and sets the timeout to 30 minutes
-                sh '/usr/local/bin/trivy image --timeout 30m0s --scanners vuln --format template --template "@/usr/local/bin/html.tpl" -o report.html moshaye/sprint-boot-app:latest'
+                sh '/usr/local/bin/trivy image  --debug  --timeout 30m0s --scanners vuln --format template --template "@/usr/local/bin/html.tpl" -o report.html moshaye/sprint-boot-app:latest'
             }
         }
 
                 stage('OWASP Dependency Check') {
             steps {
-                script {
-                    // Running OWASP Dependency-Check
-                    dependencyCheck additionalArguments: '--format HTML --format XML', odcInstallation: 'default'
-                }
+                              // Running OWASP Dependency-Check
+                  sh  "dependencyCheck additionalArguments: '--format HTML --format XML', odcInstallation: 'default'"
+                
             }
         }
         stage('Upload Scan report to AWS S3') {
