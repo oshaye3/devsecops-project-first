@@ -4,7 +4,7 @@ In this project, I created an end-to-end CI/CD pipeline while keeping in mind Se
 
 
 ## Project Architecture
-![](https://github.com/praveensirvi1212/DevSecOps-project/blob/main/Images/architecture.png)
+![](https://github.com/oshaye3/Devsecops-project-first/blob/master/Images/architecture.png)
 
 ## Pipeline flow:
 1. Jenkins will fetch the code from the remote repo 
@@ -42,29 +42,29 @@ if Jenkins fails to create deployment and service in Kubernetes, the whole pipel
 ### Stage-01 : Install JDK and Create a Java Springboot application
 Push all the web application page code file into github
 
-![](https://github.com/praveensirvi1212/DevSecOps-project/blob/main/Images/code.png) 
+![](https://github.com/oshaye3/devsecops-project-first/blob/master/Images/code.png) 
 
 ### Stage-02 : Install Jenkins and start Jenkins 
 Jenkins Installation Prequuisities  https://www.jenkins.io/doc/book/installing/linux/
-1. Installation guide is available here  https://github.com/praveensirvi1212/DevSecOps-project/blob/main/Jenkins_installation.md
+1. Installation guide is available here  https://github.com/oshaye3/devsecops-project-first/blob/main/Jenkins_installation.md
 1. After installation, install suggested plugins
 1. Open Jenkins Dashboard and install required plugins – SonarQube Scanner, Hashicorp Vault, Slack
 1. go to manage jenkins > manage pulgins > search for plugins > install without restart
-![](https://github.com/praveensirvi1212/DevSecOps-project/blob/main/Images/jenkins.png) 
+![](https://github.com/oshaye3/devsecops-project-first/blob/master/Images/jenkins.png) 
 
 1. We will required another pulgin called - Kubernetes Continuous Deploy Plugin ( this plugin is deprecated but we can down grade the version for just testing purpose)
-Download the Plugin file from here https://github.com/praveensirvi1212/DevSecOps-project/blob/main/kubernetes-cd.hpi
+Download the Plugin file from here https://github.com/oshaye3/devsecops-project-first/blob/main/kubernetes-cd.hpi
 1. Now go to manage jenkins > manage pulgins > Advanced Setting > Deploy Plugin > choose the download file ( kubernetes-cd.hpi) > click on Deploy
-![](https://github.com/praveensirvi1212/DevSecOps-project/blob/main/Images/plugins.png) 
+![](https://github.com/oshaye3/devsecops-project-first/blob/master/Images/plugins.png) 
 
 ### Stage-03 : Install Postgre Database and Install SonarQube
-1. Installation guide is available here https://github.com/praveensirvi1212/DevSecOps-project/blob/main/sonarqube_installation_with_postgres_database.md
-![](https://github.com/praveensirvi1212/DevSecOps-project/blob/main/Images/sonarqube.jpeg) 
+1. Installation guide is available here https://github.com/oshaye3/devsecops-project-first/blob/main/sonarqube_installation_with_postgres_database.md
+![](https://github.com/oshaye3/devsecops-project-first/blob/master/Images/sonarqube.jpeg) 
 ### Stage-04 : Install Docker and Create DockerHub account
-1. Installation guide is available here https://github.com/praveensirvi1212/DevSecOps-project/blob/main/docker_installation.md
+1. Installation guide is available here https://github.com/oshaye3/devsecops-project-first/blob/main/docker_installation.md
 1. Create DockerHub account 
 
-![](https://github.com/praveensirvi1212/DevSecOps-project/blob/main/Images/dockerhub.png) 
+![](https://github.com/oshaye3/devsecops-project-first/blob/master/Images/dockerhub.png) 
 
 
 ### Stage-05 : Install Trivy for Vulnerability Scanner for Containers and other Artifacts
@@ -145,30 +145,30 @@ ui = true
 * `vault write -f auth/approle/role/jenkins-role/secret-id`
 
 ##### 2. Now go to jenkins > Manage  Jenkins >Manage Credentials > system > Add credentials > Vault App Role Credentials > paste roleid and secret id token we create in Vault and save and apply.
-![](https://github.com/praveensirvi1212/DevSecOps-project/blob/main/Images/approleVault.png) 
+![](https://github.com/oshaye3/devsecops-project-first/blob/master/Images/approleVault.png) 
 
 
  ### Stage-02: SonarQube integration with Jenkins
 1. Open SonarQube and login using admin username and admin password
 1. Create a Project >Enter Project name, Project key > click on setup
-![](https://github.com/praveensirvi1212/DevSecOps-project/blob/main/Images/sonarqubedb.png)
+![](https://github.com/oshaye3/devsecops-project-first/blob/master/Images/sonarqubedb.png)
 1. Create sonarqube token > and save it soemwhere
 1. click on continue > Run analysis on your project > maven > copy following commands and save it some where
-![](https://github.com/praveensirvi1212/DevSecOps-project/blob/main/Images/soanr.png)
+![](https://github.com/oshaye3/devsecops-project-first/blob/master/Images/soanr.png)
 1. Now go to jenkins >Manage Credentials > system > Add credentials > secret text file > paste token we create in sonarqube and save and apply.
 
 1. go to manage Jenkins > Configure System > Add SonarQube Server name,url and credentials
-![](https://github.com/praveensirvi1212/DevSecOps-project/blob/main/Images/sonarqube.png)
+![](https://github.com/oshaye3/devsecops-project-first/blob/master/Images/sonarqube.png)
 1. go to manage Jenkins > Global tool configuration >  Add Maven and SonarQube Scanner
 
 1. Now go to SonarQube > Quality gates > create your own quality gate
-![](https://github.com/praveensirvi1212/DevSecOps-project/blob/main/Images/quality%20gate.png)
+![](https://github.com/oshaye3/devsecops-project-first/blob/master/Images/quality%20gate.png)
 1. Add conditions with your own requirement
 1. Select your project and Set this quality gate as defalut
-![](https://github.com/praveensirvi1212/DevSecOps-project/blob/main/Images/qualiygate.png)
+![](https://github.com/oshaye3/devsecops-project-first/blob/master/Images/qualiygate.png)
 1. Now go to your Project > project setting > webhook
 1. create webhook with your Jenkins url
-![](https://github.com/praveensirvi1212/DevSecOps-project/blob/main/Images/webhook.png)
+![](https://github.com/oshaye3/devsecops-project-first/blob/master/Images/webhook.png)
 
 ### Stage-03 : Add jenkins user to docker group
  ```sh 
@@ -275,7 +275,7 @@ Now copy the config file data and paste into jenkins > save
 1. Now go to this site https://slack-t8s2905.slack.com/apps/new/A0F7VRFKN-jenkins-ci
 1. Now choose your channel name
 
-![](https://github.com/praveensirvi1212/DevSecOps-project/blob/main/Images/slack.png)
+![](https://github.com/oshaye3/devsecops-project-first/blob/master/Images/slack.png)
 1. Click on Add Jenkins CI inetegration
 1. Copy the workspace name and token
 1. store your secret token into Hashicorp Vault
@@ -284,7 +284,7 @@ Now copy the config file data and paste into jenkins > save
 1. Now go to jenkins > Manage credentials > system (global ) > Vault sceret text credentials 
 1. give your vault sercrets path, Vault key and save
 1. Now go to configure system > slack > give your slack name and select credentials , give your Default channel name like ‘#devops’
-![](https://github.com/praveensirvi1212/DevSecOps-project/blob/main/Images/slcakws.png)
+![](https://github.com/oshaye3/devsecops-project-first/blob/master/Images/slcakws.png)
 
 
 
@@ -384,7 +384,7 @@ stage("Quality Gate") {
           }
 ```
 ### Stage-05 : Docker Build
-First write your dockerfile to build docker images.I have posted my  dockerfile here https://github.com/praveensirvi1212/DevSecOps-project/blob/main/Dockerfile .
+First write your dockerfile to build docker images.I have posted my  dockerfile here https://github.com/oshaye3/devsecops-project-first/blob/main/Dockerfile .
 
 In this stage i  shell command sh to build docker image
 1. Define  a stage Docker Build
@@ -462,7 +462,7 @@ stage('Docker Push') {
 }
  ``` 
 ### Stage-08: Deploy to kubernetes
-write your kubernetes  deployment and service manifest.Find my kubernetes manifest here https://github.com/praveensirvi1212/DevSecOps-project/blob/main/spring-boot-deployment.yaml .
+write your kubernetes  deployment and service manifest.Find my kubernetes manifest here https://github.com/oshaye3/devsecops-project-first/blob/main/spring-boot-deployment.yaml .
 
 Now generate pipeline syntax:- 
 For this Kubernetes continuous Deploy plugins should be installed
@@ -505,41 +505,41 @@ slackSend( channel: "#devops", token: 'slack-token', color : "danger", message: 
 }
 }
  ```
-#### Find whole pipeline here https://github.com/praveensirvi1212/DevSecOps-project/blob/main/Jenkinsfile 
+#### Find whole pipeline here https://github.com/oshaye3/devsecops-project-first/blob/main/Jenkinsfile 
 
 ## Step: 4 Projecct Output
 
 # Final outputs of this Project
 ### Jenkins Output : 
 After 86th  Build my  jenkins pipeline became successful. 
-![](https://github.com/praveensirvi1212/DevSecOps-project/blob/main/Images/pipelineop.png) 
+![](https://github.com/oshaye3/devsecops-project-first/blob/master/Images/pipelineop.png) 
 
 ### Sonarqube Output: 
-![](https://github.com/praveensirvi1212/DevSecOps-project/blob/main/Images/sonarqubeop.png) 
+![](https://github.com/oshaye3/devsecops-project-first/blob/master/Images/sonarqubeop.png) 
 
 ### Quality Gate Status in Jenkins
 This Output is the build number 86th. SonarQube Quality gate status is green and passed .   
 You applied your custom quality gate like : there should be zero ( bug, Vulnerability , code smell ) and your code have greater then 0 (bugs, vulnerability , code smells) . Then your quality gate status will become failure or red. If your quality gate status beome failure , stages after quality gate will be failure.
-![](https://github.com/praveensirvi1212/DevSecOps-project/blob/main/Images/qualitygateop.png) 
+![](https://github.com/oshaye3/devsecops-project-first/blob/master/Images/qualitygateop.png) 
 
 ### Trivy report in AWS S3 push by jenkins
-![](https://github.com/praveensirvi1212/DevSecOps-project/blob/main/Images/trivy-report-s3.png) 
+![](https://github.com/oshaye3/devsecops-project-first/blob/master/Images/trivy-report-s3.png) 
 
 
 ### Trivy report 
-![](https://github.com/praveensirvi1212/DevSecOps-project/blob/main/Images/TrivyReprt.png) 
+![](https://github.com/oshaye3/devsecops-project-first/blob/master/Images/TrivyReprt.png) 
 
 
 ### Images in DockerHub pushed by jenkins 
-![](https://github.com/praveensirvi1212/DevSecOps-project/blob/main/Images/dockerhubop.png) 
+![](https://github.com/oshaye3/devsecops-project-first/blob/master/Images/dockerhubop.png) 
 
 ### kubernetes output ( deployment and service created by jenkins) 
-![](https://github.com/praveensirvi1212/DevSecOps-project/blob/main/Images/kubernetesop.png) 
+![](https://github.com/oshaye3/devsecops-project-first/blob/master/Images/kubernetesop.png) 
 
 ### Application output deployed in k8s 
-![](https://github.com/praveensirvi1212/DevSecOps-project/blob/main/Images/spring-boot-app-op.png) 
+![](https://github.com/oshaye3/devsecops-project-first/blob/master/Images/spring-boot-app-op.png) 
 
 ### Slack output 
-![](https://github.com/praveensirvi1212/DevSecOps-project/blob/main/Images/slackop.png) 
+![](https://github.com/oshaye3/devsecops-project-first/blob/master/Images/slackop.png) 
 
 
