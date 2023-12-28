@@ -1,4 +1,4 @@
-FROM adoptopenjdk/openjdk21:alpine-slim as build
+FROM alpine:3.15 as build
 WORKDIR /app
 
 COPY mvnw .
@@ -9,7 +9,7 @@ COPY src src
 RUN ./mvnw package
 COPY target/*.jar app.jar
 
-FROM adoptopenjdk/openjdk21:alpine-slim
+FROM alpine:3.15
 VOLUME /tmp
 RUN addgroup --system javauser && adduser -S -s /bin/false -G javauser javauser
 WORKDIR /app
