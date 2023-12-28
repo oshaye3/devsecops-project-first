@@ -80,6 +80,15 @@ stage('Build & JUnit Test') {
       	            sh '/usr/local/bin/trivy image --timeout 15m0s  --format template --template "@/usr/local/bin/html.tpl" -o report.html moshaye/sprint-boot-app:latest'
             }
         }
+
+                stage('OWASP Dependency Check') {
+            steps {
+                script {
+                    // Running OWASP Dependency-Check
+                    dependencyCheck additionalArguments: '--format HTML --format XML', odcInstallation: 'default'
+                }
+            }
+        }
         stage('Upload Scan report to AWS S3') {
               steps {
                   sh 'aws s3 cp report.html s3://michael-catalyst'
@@ -128,7 +137,9 @@ stage('Build & JUnit Test') {
     }
     post{
         always{
+            dependencyCheckPublisher pattern: '**/dependency-check-report.*'
             sendSlackNotifcation()
+              
             }
         }
 }
