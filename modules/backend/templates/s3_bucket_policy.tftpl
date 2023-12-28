@@ -1,0 +1,67 @@
+data "aws_iam_policy_document" "bucket_policy_devsecops" {
+  statement {
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::194856677704:role/test-role-s3"]
+    }
+
+    actions = [
+      "s3:GetObject",
+      "s3:PutObject",
+      "s3:DeleteObject",
+    ]
+
+    resources = [
+      "arn:aws:s3:::${aws_s3_bucket.devsecops.bucket}/*"
+    ]
+  }
+
+  statement {
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::194856677704:role/test-role-s3"]
+    }
+
+    actions = [
+      "s3:ListBucket",
+    ]
+
+    resources = [
+      "arn:aws:s3:::${aws_s3_bucket.devsecops.bucket}"
+    ]
+  }
+}
+
+data "aws_iam_policy_document" "bucket_policy_tfstate_devsecops" {
+  statement {
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::194856677704:role/test-role-s3"]
+    }
+
+    actions = [
+      "s3:GetObject",
+      "s3:PutObject",
+      "s3:DeleteObject",
+    ]
+
+    resources = [
+      "arn:aws:s3:::${aws_s3_bucket.tfstate_devsecops.bucket}/*"
+    ]
+  }
+
+  statement {
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::194856677704:role/test-role-s3"]
+    }
+
+    actions = [
+      "s3:ListBucket",
+    ]
+
+    resources = [
+      "arn:aws:s3:::${aws_s3_bucket.tfstate_devsecops.bucket}"
+    ]
+  }
+}
