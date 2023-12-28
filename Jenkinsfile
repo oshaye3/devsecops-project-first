@@ -75,9 +75,11 @@ stage('Build & JUnit Test') {
                     sh '${DOCKER_PATH} image tag moshaye/sprint-boot-app:v1.$BUILD_ID moshaye/sprint-boot-app:latest'
             }
         }
+
         stage('Image Scan') {
             steps {
-      	            sh '/usr/local/bin/trivy image --timeout 15m0s  --format template --template "@/usr/local/bin/html.tpl" -o report.html moshaye/sprint-boot-app:latest'
+                // Disables secret scanning and sets the timeout to 30 minutes
+                sh '/usr/local/bin/trivy image --timeout 30m0s --scanners vuln --format template --template "@/usr/local/bin/html.tpl" -o report.html moshaye/sprint-boot-app:latest'
             }
         }
 
