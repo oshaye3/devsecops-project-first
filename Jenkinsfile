@@ -31,10 +31,10 @@ pipeline {
             }
         } 
     
-            stage('Terraform Init and Apply') {
+        stage('Terraform Init and Apply') {
             steps {
-                // Set up AWS credentials if necessary
-                withAWS(credentials: 'aws-cred') {
+                // Set AWS credentials as environment variables
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-cred']]) {
                     // Navigate to the Terraform files directory
                     dir('modules/backend') {
                         // Initialize Terraform
