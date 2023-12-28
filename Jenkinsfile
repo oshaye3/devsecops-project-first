@@ -34,7 +34,7 @@ pipeline {
             stage('Terraform Init and Apply') {
             steps {
                 // Set up AWS credentials if necessary
-                withAWS(credentials: 'aws-credentials-id') {
+                withAWS(credentials: 'aws-cred') {
                     // Navigate to the Terraform files directory
                     dir('modules/backend') {
                         // Initialize Terraform
@@ -137,7 +137,7 @@ stage('Build & JUnit Test') {
      
         stage('Upload Scan report to AWS S3') {
               steps {
-                  sh 'aws s3 cp report.html s3://michael-catalyst'
+                  sh 'aws s3 cp report.html s3://michael-devsecops'
               }
          }
 
