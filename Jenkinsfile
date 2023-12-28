@@ -25,8 +25,8 @@ pipeline {
 
     stage('Checkov Scan') {
             steps {
-                    // Run Checkov against your IaC files
-                  //  sh 'checkov -d . --skip-check * --quiet'       
+                    // Run Checkov against your IaC files terraform
+                   sh 'checkov -d ./modules/backend'       
                   sh 'checkov --version'    
             }
         } 
