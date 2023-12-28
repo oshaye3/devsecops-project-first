@@ -30,6 +30,27 @@ pipeline {
                   sh 'checkov --version'    
             }
         } 
+    
+            stage('Terraform Init and Apply') {
+            steps {
+                // Set up AWS credentials if necessary
+                withAWS(credentials: 'aws-credentials-id') {
+                    // Navigate to the Terraform files directory
+                    dir('modules/backend') {
+                        // Initialize Terraform
+                        sh 'terraform init'
+                        // Format Terraform code
+                        sh 'terraform fmt'
+                        // Validate Terraform code
+                        sh 'terraform validate'
+                        // Plan Terraform deployment
+                        sh 'terraform plan -out=tfplan'
+                        // Apply Terraform deployment
+                        sh 'terraform apply -auto-approve -input=false tfplan'
+                    }
+                }
+            }
+        }
 
         stage('OWASP Dependency Check') {
     steps {
