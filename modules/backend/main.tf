@@ -102,7 +102,7 @@ resource "aws_s3_bucket_public_access_block" "public_access_block_tfstate_devsec
   block_public_acls       = false
   block_public_policy     = false
   ignore_public_acls      = false
-  restrict_public_buckets = false
+  restrict_public_buckets = true
 }
 
 resource "aws_s3_bucket_public_access_block" "public_access_block_devsecops" {
@@ -110,5 +110,5 @@ resource "aws_s3_bucket_public_access_block" "public_access_block_devsecops" {
   block_public_acls       = false
   block_public_policy     = false
   ignore_public_acls      = false
-  restrict_public_buckets = false
+  restrict_public_buckets = true
 }
