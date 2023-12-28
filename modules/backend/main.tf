@@ -2,6 +2,9 @@ resource "aws_s3_bucket" "devsecops" {
   bucket        = "michael-devsecops"
   force_destroy = var.force_destroy
   tags          = var.bucket_tags
+    versioning {
+    enabled = true
+  }
 }
 
 resource "aws_s3_bucket" "tfstate_devsecops" {
@@ -15,6 +18,10 @@ resource "aws_s3_bucket" "tfstate_devsecops" {
   }
 
   */
+
+    versioning {
+    enabled = true
+  }
   
 }
 
@@ -112,3 +119,4 @@ resource "aws_s3_bucket_public_access_block" "public_access_block_devsecops" {
   ignore_public_acls      = true
   restrict_public_buckets = true
 }
+
