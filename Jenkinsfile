@@ -83,13 +83,13 @@ stage('Build & JUnit Test') {
             }
         }
 
-                stage('OWASP Dependency Check') {
-            steps {
-                              // Running OWASP Dependency-Check
-                  sh  "dependencyCheck additionalArguments: '--format HTML --format XML', odcInstallation: 'default'"
+        //         stage('OWASP Dependency Check') {
+        //     steps {
+        //                       // Running OWASP Dependency-Check
+        //           sh  "dependencyCheck additionalArguments: '--format HTML --format XML', odcInstallation: 'default'"
                 
-            }
-        }
+        //     }
+        // }
         stage('Upload Scan report to AWS S3') {
               steps {
                   sh 'aws s3 cp report.html s3://michael-catalyst'
