@@ -46,12 +46,25 @@ stage('Build & JUnit Test') {
             }
         }
 
-                stage('OWASP Dependency Check') {
-            steps {
-                // Run the OWASP Dependency-Check
-                dependencyCheck additionalArguments: '--format HTML --format XML', odcInstallation: 'owasp-default'
+stage('OWASP Dependency Check') {
+    steps {
+        script {
+            // Check if the OWASP Dependency-Check tool is installed via Jenkins Global Tool Configuration
+            def isOwaspToolConfigured = tool name: 'OWASP-Dependency-Check', type: 'DependencyCheckInstallation'
+
+            // If it's configured, use it
+            if (isOwaspToolConfigured) {
+                // Run the OWASP Dependency-Check using the configured tool in Jenkins
+                dependencyCheck additionalArguments: '--format HTML --format XML', odcInstallation: 'OWASP-Dependency-Check'
+            } else {
+                // Otherwise, use the direct shell command
+                def dependencyCheckPath = '/usr/local/bin/dependency-check'
+                // Run the OWASP Dependency-Check with additional arguments
+                sh "${dependencyCheckPath} --project 'devsecops-app' --scan './' --out . --format 'HTML' --format 'XML'"
             }
         }
+    }
+}
 
         stage('SonarQube Analysis') {
             steps {
