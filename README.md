@@ -232,14 +232,14 @@ You will find your kubeconfig like this
 apiVersion: v1
 clusters:
 - cluster:
-    certificate-authority:  /home/praveen/.minikube/ca.crt
+    certificate-authority:  /home/michael-admin/.minikube/ca.crt
     extensions:
     - extension:
         last-update: Fri, 24 Feb 2023 19:17:00 IST
         provider: minikube.sigs.k8s.io
         version: v1.28.0
       name: cluster_info
-    server: https://192.168.49.2:8443
+    server: https://x.x.x.x:8443
   name: minikube
 contexts:
 - context:
