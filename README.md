@@ -26,8 +26,11 @@ if Jenkins fails to create deployment and service in Kubernetes, the whole pipel
 1. JDK 
 1. Git 
 1. Github
+1. Checkov
 1. Jenkins
 1. Sonarqube
+1. Jacoco
+1. OWASP
 1. Docker
 1. Trivy
 1. AWS account
@@ -35,6 +38,8 @@ if Jenkins fails to create deployment and service in Kubernetes, the whole pipel
 1. Minikube & Kubectl
 1. Hashicorp Vault
 1. Slack
+1. Grafana
+1. Prometheus
 
  # Want to create this Project by your own  then *Follow these  project steps*
 ## Step: 1 Installation Part 
@@ -68,15 +73,10 @@ Download the Plugin file from here https://github.com/oshaye3/devsecops-project-
 
 
 ### Stage-05 : Install Trivy for Vulnerability Scanner for Containers and other Artifacts
-I am following  Debian/Ubuntu  based installation guide you can choose accourding to your os
+I Used Mac
 
-```sh 
-   sudo apt-get install wget apt-transport-https gnupg lsb-release
-wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
-echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | sudo tee -a /etc/apt/sources.list.d/trivy.list
-sudo apt-get update
-sudo apt-get install trivy
-   ``` 
+brew  install trivy
+    
 #### After trivy installation you can scan Container Images, FileSystem, Git Repositories
 In our can we will scan contianer images
 
@@ -91,11 +91,12 @@ HashiCorp Vault is a secret-management tool specifically designed to control a
 ### Stage-07 : Install Slack
 Slack is a workplace communication tool, “a single place for messaging, tools and files.” .
 
-Install Slack from official website of Slack https://slack.com/intl/en-in/downloads/linux
+Install Slack from official website of Slack https://slack.com/intl/en-in/downloads/ and choose Mac or Linux 
 
 
 ### Stage-08: Install Minikube
-Minikube installation Guide is Available here  https://www.linuxtechi.com/how-to-install-minikube-on-ubuntu/
+Minikube installation Guide is Available here  https://www.linuxtechi.com/how-to-install-minikube-on-ubuntu/  It is easy in Mac just used 
+     brew install minikube
 
 # Done with Installation , Now will we integrate all the tools with Jenkins
 
@@ -175,7 +176,7 @@ ui = true
 sudo gpasswd -a jenkins docker
  ``` 
 ### Stage-04: Install and Configure AWS CLI
- 1.Installation Guide is Available here https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html 
+ 1.Installation Guide is Available here https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html  or you can use brew install awscli in MAC
 1. go to AWS > create access key and secret key
 1. configure aws cli using
 ```sh 
@@ -263,10 +264,10 @@ preferences: {}
 users:
 - name: minikube
   user:
-    client-certificate: /home/praveen/.minikube/profiles/minikube/client.crt
-    client-key: home/praveen/.minikube/profiles/minikube/client.key
+    client-certificate: /home/michael-admin/.minikube/profiles/minikube/client.crt
+    client-key: home/michael-admin/.minikube/profiles/minikube/client.key
 ```
-##### Note : I encoded to base64 the data of ca.crt, client.key and client.crt and directly paste the data instead of /home/praveen/.minikube/profiles/minikube/client.crt . But you have to specify the `certificate- authority` to  `certificate- authority-data` ,  `client-certificate` to  `client-certificate-data`,  `client-key` to  `client-key-data`
+
 
 Now copy the config file data and paste into jenkins > save
 
@@ -319,11 +320,12 @@ pipeline {
 1. paste it into stage steps git check
 
 ```sh 
-stage('Checkout git') {
-     steps {
-	git branch: 'main', url: 'https://github.com/praveensirvi1212/DevSecOps-project'
-  }
-}
+    stages {
+        stage('Checkout git') {
+            steps {
+               git branch: 'master', url: 'https://github.com/oshaye3/devsecops-project-first'
+            }
+        }
 ```
 ### Stage-02 : Build and Junit test
 1. Defiine a stage as Build and Junit test 
@@ -394,12 +396,12 @@ In this stage i  shell command sh to build docker image
 1. I used build id of jenkins to make versions of docker images
 
 ```sh
-stage('Docker Build') {
-      steps {
-           sh 'docker build -t praveensirvi/sprint-boot-app:v1.$BUILD_ID .'
-           sh 'docker image tag praveensirvi/sprint-boot-app:v1.$BUILD_ID praveensirvi/sprint-boot-app:latest'
-	}
-}
+        stage('Docker  Build') {
+            steps {
+                    sh '${DOCKER_PATH} build -t moshaye/sprint-boot-app:v1.$BUILD_ID .'
+                    sh '${DOCKER_PATH} image tag moshaye/sprint-boot-app:v1.$BUILD_ID moshaye/sprint-boot-app:latest'
+            }
+        }
 ```
 ### Stage-06: Trivy Image scan
 In this stage i  trivy shell command sh to scan docker image
@@ -409,11 +411,12 @@ In this stage i  trivy shell command sh to scan docker image
 1.  give your Trivy shell command to scan build image
 #### Note – There are 3 types of report output  format of trivy ( Table , JSON, Template). I used  html template for output report of trivy scan
 ```sh
-stage('Image Scan') {
-	steps {
-	sh ' trivy image --format template --template "@/usr/local/share/trivy/templates/html.tpl" -o report.html praveensirvi/sprint-boot-app:latest '
-	}
-}
+        stage('Image Scan') {
+            steps {
+                // Disables secret scanning and sets the timeout to 30 minutes
+                sh '/usr/local/bin/trivy image  --debug  --timeout 30m0s --scanners vuln --format template --template "@/usr/local/bin/html.tpl" -o report.html moshaye/sprint-boot-app:latest'
+            }
+        }
 ```
 ### Stage-07: Upload report generated by trivy to AWS S3
 In this stage i  shell command sh to scan docker image
@@ -424,11 +427,11 @@ In this stage i  shell command sh to scan docker image
 1. give your shell command to upload object to aws s3
 
 ```sh
-stage('Upload Scan report to AWS S3') {
-	steps {
-		sh 'aws s3 cp report.html s3://devsecops-project/'
-	}	
-}
+        stage('Upload Scan report to AWS S3') {
+              steps {
+                  sh 'aws s3 cp report.html s3://michael-devsecops'
+              }
+         }
 ```
 #### Note – in this Porject i configure aws cli for jenkins user also and execute just shell command . But you can use another method , save your credentials into jenkins and generate a pipeline to upload object to s3.
 For that - S3 plugins should be installed
@@ -450,16 +453,37 @@ In this stage i  shell command sh to push docker image to docker hub. I stored C
 1. give your shell command to push docker images to docker hub
 
  ``` sh
-stage('Docker Push') {
-       steps {
-	withVault(configuration: [skipSslVerification: true, timeout: 60, vaultCredentialId:   'vault-cred', vaultUrl: 'http://your-vault-server-url:8200'], vaultSecrets: [[path: 'secrets/creds/docker', secretValues: [[vaultKey: 'username'], [vaultKey: 'password']]]]) {
-	sh "docker login -u ${username} -p ${password} "
-	sh 'docker push praveensirvi/sprint-boot-app:v1.$BUILD_ID'
-	sh 'docker push praveensirvi/sprint-boot-app:latest'
-	sh 'docker rmi praveensirvi/sprint-boot-app:v1.$BUILD_ID praveensirvi/sprint-boot-app:latest'
-	}
-      }
-}
+
+        stage('Docker Push') {
+            steps {
+                withVault(
+                    configuration: [
+                        skipSslVerification: true, 
+                        timeout: 60, 
+                        vaultCredentialId: 'd1bb3fcc-691b-44e8-9b95-ee48b7dc1547', 
+                        vaultUrl: 'http://127.0.0.1:8200',
+                        engineVersion: 1
+                    ], 
+                    vaultSecrets: [
+                        [
+                            path: 'secrets/creds/docker', 
+                            secretValues: [
+                                [envVar: 'DOCKER_USERNAME', vaultKey: 'username'], 
+                                [envVar: 'DOCKER_PASSWORD', vaultKey: 'password']
+                            ]
+                        ]
+                    ]
+                ) {
+                    // Ensure the environment variables are referenced correctly
+                    sh "${env.DOCKER_PATH} login -u ${env.DOCKER_USERNAME} -p ${env.DOCKER_PASSWORD}"
+                    sh "${env.DOCKER_PATH} push moshaye/sprint-boot-app:v1.${BUILD_ID}"
+                    sh "${env.DOCKER_PATH} push moshaye/sprint-boot-app:latest"
+                    // Also ensure you are removing the correct images
+                    sh "${env.DOCKER_PATH} rmi moshaye/sprint-boot-app:v1.${BUILD_ID}"
+                    sh "${env.DOCKER_PATH} rmi moshaye/sprint-boot-app:latest"
+                }
+            }
+        }
  ``` 
 ### Stage-08: Deploy to kubernetes
 write your kubernetes  deployment and service manifest.Find my kubernetes manifest here https://github.com/oshaye3/devsecops-project-first/blob/main/spring-boot-deployment.yaml .
@@ -471,13 +495,13 @@ For this Kubernetes continuous Deploy plugins should be installed
 1. generate pipeline syntax
 1. write your kubernetes manifest name  into configs: 'your-k8s-manifest-name'
  ```sh
-stage('Deploy to k8s') {
-	steps {
-	     script{
-                      kubernetesDeploy configs: 'spring-boot-deployment.yaml', kubeconfigId: 'kubernetes'
-		}
-	}
-}
+        stage('Deploy to k8s') {
+            steps {
+                script{
+                    kubernetesDeploy configs: 'spring-boot-deployment.yaml', kubeconfigId: 'kube-jenkins'
+                }
+            }
+        }
 ```
 ## Stage: Post build action 
 In post build action i used slack notification . After  build jenkins will send notification massage to slack whether your build success or failed.
@@ -495,14 +519,14 @@ sendSlackNotification function
  ```sh
 def sendSlackNotifcation()
 {
-if ( currentBuild.currentResult == "SUCCESS" ) {
-buildSummary = "Job_name: ${env.JOB_NAME}\n Build_id: ${env.BUILD_ID} \n Status: *SUCCESS*\n Build_url: ${BUILD_URL}\n Job_url: ${JOB_URL} \n"
-slackSend( channel: "#devops", token: 'slack-token', color: 'good', message: "${buildSummary}")
-}
-else {
-buildSummary = "Job_name: ${env.JOB_NAME}\n Build_id: ${env.BUILD_ID} \n Status: *FAILURE*\n Build_url: ${BUILD_URL}\n Job_url: ${JOB_URL}\n \n "
-slackSend( channel: "#devops", token: 'slack-token', color : "danger", message: "${buildSummary}")
-}
+    if ( currentBuild.currentResult == "SUCCESS" ) {
+        buildSummary = "Job_name: ${env.JOB_NAME}\n Build_id: ${env.BUILD_ID} \n Status: *SUCCESS*\n Build_url: ${BUILD_URL}\n Job_url: ${JOB_URL} \n"
+        slackSend( channel: "#devsecops", token: 'slack-token', color: 'good', message: "${buildSummary}")
+    }
+    else {
+        buildSummary = "Job_name: ${env.JOB_NAME}\n Build_id: ${env.BUILD_ID} \n Status: *FAILURE*\n Build_url: ${BUILD_URL}\n Job_url: ${JOB_URL}\n  \n "
+        slackSend( channel: "#devsecops", token: 'slack-token', color : "danger", message: "${buildSummary}")
+    }
 }
  ```
 #### Find whole pipeline here https://github.com/oshaye3/devsecops-project-first/blob/main/Jenkinsfile 
