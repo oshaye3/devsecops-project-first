@@ -7,7 +7,7 @@ In this project, I created an end-to-end CI/CD pipeline while keeping in mind Se
 ![](https://github.com/oshaye3/Devsecops-project-first/blob/master/Images/architecture.png)
 
 ## Project Infra Architecture option 1 ( Using the github action with TF to deploy the s3 bucket) 
-![](https://github.com/oshaye3/Devsecops-project-first/blob/master/Images/option1-infra.png")
+![](https://github.com/oshaye3/Devsecops-project-first/blob/master/Images/option1-infra.png)
 
 ## Project infra Architecture option 2 ( This is selected and used directly in the CICD pipeline)
 ![](https://github.com/oshaye3/Devsecops-project-first/blob/master/Images/option2-infra.png)
