@@ -7,10 +7,10 @@ In this project, I created an end-to-end CI/CD pipeline while keeping in mind Se
 ![](https://github.com/oshaye3/Devsecops-project-first/blob/master/Images/architecture.png)
 
 ## Project Infra Architecture option 1 ( Using the github action with TF to deploy the s3 bucket) 
-   https://github.com/oshaye3/Devsecops-project-first/blob/master/Images/option1-infra.png
+![](https://github.com/oshaye3/Devsecops-project-first/blob/master/Images/option1-infra.png")
 
 ## Project infra Architecture option 2 ( This is selected and used directly in the CICD pipeline)
-   https://github.com/oshaye3/Devsecops-project-first/blob/master/Images/option2-infra.png
+![](https://github.com/oshaye3/Devsecops-project-first/blob/master/Images/option2-infra.png)
 
 
 ## Pipeline flow only using the Project infra Architecture option 2 :
@@ -30,7 +30,7 @@ if the docker build fails when the whole pipeline will become a failure and Jenk
 if Jenkins fails to create deployment and service in Kubernetes, the whole pipeline will become a failure and Jenkins will notify the user that your build fails.
 
 ### stage view to illustrate the flow of pipeline that is successful
-  https://github.com/oshaye3/Devsecops-project-first/blob/master/Images/option2-infra.png
+![](https://github.com/oshaye3/Devsecops-project-first/blob/master/Images/option2-infra.png)
 
 ### PreRequisites
 1. JDK 
@@ -578,5 +578,5 @@ You applied your custom quality gate like : there should be zero ( bug, Vulnerab
 
 
 ### You can check other screenshot from this project below
-  https://github.com/oshaye3/devsecops-project-first/screen-shot-devsecops.docx
+![](https://github.com/oshaye3/devsecops-project-first/screen-shot-devsecops.docx)
 
