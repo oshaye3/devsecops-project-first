@@ -30,7 +30,7 @@ if the docker build fails when the whole pipeline will become a failure and Jenk
 if Jenkins fails to create deployment and service in Kubernetes, the whole pipeline will become a failure and Jenkins will notify the user that your build fails.
 
 ### stage view to illustrate the flow of pipeline that is successful
-![](https://github.com/oshaye3/Devsecops-project-first/blob/master/Images/option2-infra.png)
+![](https://github.com/oshaye3/Devsecops-project-first/blob/master/Images/stage-view.png)
 
 ### PreRequisites
 1. JDK 
