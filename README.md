@@ -3,11 +3,19 @@
 In this project, I created an end-to-end CI/CD pipeline while keeping in mind Securities Best Practices, DevSecOps principles and used all these tools *Git, GitHub , Jenkins,Maven, Junit, SonarQube, Docker, Trivy, AWS S3, Docker Hub, Kubernetes , Slack and Hashicorp Vault,*  to achive the goal.
 
 
-## Project Architecture
+## Project Architecture application deployment
 ![](https://github.com/oshaye3/Devsecops-project-first/blob/master/Images/architecture.png)
 
-## Pipeline flow:
-1. Jenkins will fetch the code from the remote repo 
+## Project Infra Architecture option 1 ( Using the github action with TF to deploy the s3 bucket) 
+   https://github.com/oshaye3/Devsecops-project-first/blob/master/Images/option1-infra.png
+
+## Project infra Architecture option 2 ( This is selected and used directly in the CICD pipeline)
+   https://github.com/oshaye3/Devsecops-project-first/blob/master/Images/option2-infra.png
+
+
+## Pipeline flow only using the Project infra Architecture option 2 :
+1. Jenkins will fetch the code from the remote repo in the github
+2. The 
 2. Maven will build the code, if the build fails, the whole pipeline will become a failure and Jenkins will notify the user, If build success then 
 3. Junit will do unit testing, if the application passes test cases then will go to the next step otherwise the whole pipeline will become a failureJenkins will notify the user that your build fails.
 4.SonarQube scanner will scan the code and will send the report to the SonarQube server, where the report will go through the quality gate and gives the output to the web Dashboard. 
@@ -21,6 +29,8 @@ if the docker build fails when the whole pipeline will become a failure and Jenk
 8. After the docker push, Jenkins will create deployment and service in minikube and our application will be deployed into Kubernetes.
 if Jenkins fails to create deployment and service in Kubernetes, the whole pipeline will become a failure and Jenkins will notify the user that your build fails.
 
+### stage view to illustrate the flow of pipeline that is successful
+  https://github.com/oshaye3/Devsecops-project-first/blob/master/Images/option2-infra.png
 
 ### PreRequisites
 1. JDK 
@@ -542,15 +552,15 @@ After 86th  Build my  jenkins pipeline became successful.
 ![](https://github.com/oshaye3/devsecops-project-first/blob/master/Images/sonarqubeop.png) 
 
 ### Quality Gate Status in Jenkins
-This Output is the build number 86th. SonarQube Quality gate status is green and passed .   
+This Output is the build number 106th. SonarQube Quality gate status is green and passed .   
 You applied your custom quality gate like : there should be zero ( bug, Vulnerability , code smell ) and your code have greater then 0 (bugs, vulnerability , code smells) . Then your quality gate status will become failure or red. If your quality gate status beome failure , stages after quality gate will be failure.
 ![](https://github.com/oshaye3/devsecops-project-first/blob/master/Images/qualitygateop.png) 
 
-### Trivy report in AWS S3 push by jenkins
+### Trivy report in AWS S3 push by jenkins ( You can also do presigned URL to view the trivy report)
 ![](https://github.com/oshaye3/devsecops-project-first/blob/master/Images/trivy-report-s3.png) 
 
 
-### Trivy report 
+### Trivy report stored in the s3 bucket ( You can also do presigned URL to view the trivy report)
 ![](https://github.com/oshaye3/devsecops-project-first/blob/master/Images/TrivyReprt.png) 
 
 
@@ -566,4 +576,7 @@ You applied your custom quality gate like : there should be zero ( bug, Vulnerab
 ### Slack output 
 ![](https://github.com/oshaye3/devsecops-project-first/blob/master/Images/slackop.png) 
 
+
+### You can check other screenshot from this project below
+  https://github.com/oshaye3/devsecops-project-first/screen-shot-devsecops.docx
 
