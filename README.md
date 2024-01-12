@@ -337,6 +337,78 @@ pipeline {
             }
         }
 ```
+
+### Stage-01.1 : Pre-build, Checkov, TF infra deploy and OWASP
+1. Defiine a stage as git checkout
+1. go to this site https://opensource.triology.de/jenkins/pipeline-syntax/
+1. search for checkout: check out version control
+1. give your github url, branch and generate the pipeline synatx
+1. paste it into stage steps git check
+
+```  sh 
+     stage('Pre-Build') {
+            steps {
+                sh 'export JAVA_HOME'
+                sh 'echo $JAVA_HOME'
+                sh 'javac -version'
+            }
+        }
+
+    stage('Checkov Scan') {
+            steps {
+                    // Run Checkov against your IaC files terraform
+                   sh 'checkov -d ./modules/backend'       
+                  sh 'checkov --version'    
+            }
+        } 
+    
+        stage('Terraform Init and Apply') {
+            steps {
+                // Set AWS credentials as environment variables
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-cred']]) {
+                    // Navigate to the Terraform files directory
+                    dir('modules/backend') {
+                        // Initialize Terraform
+                        sh 'terraform init'
+                        // Format Terraform code
+                        sh 'terraform fmt'
+                        // Validate Terraform code
+                        sh 'terraform validate'
+                        // Plan Terraform deployment
+                        sh 'terraform plan -out=tfplan'
+                        // Apply Terraform deployment
+                        sh 'terraform apply -auto-approve -input=false tfplan'
+                    }
+                }
+            }
+        }
+
+        stage('OWASP Dependency Check') {
+    steps {
+        script {
+    try {
+        // Check if the OWASP Dependency-Check tool is installed via Jenkins Global Tool Configuration
+        def owaspTool = tool name: 'OWASP-Dependency-Check', type: 'DependencyCheckInstallation'
+        echo "Using OWASP Dependency-Check tool at ${owaspTool}"
+
+        // Run the OWASP Dependency-Check using the configured tool in Jenkins
+        dependencyCheck additionalArguments: '--format HTML --format XML', odcInstallation: 'OWASP-Dependency-Check'
+    } catch (Exception e) {
+        echo "OWASP Dependency-Check tool not configured in Jenkins, using fallback."
+        def dependencyCheckPath = '/usr/local/bin/dependency-check'
+        if (fileExists(dependencyCheckPath)) {
+            // Run the OWASP Dependency-Check with additional arguments
+            sh "${dependencyCheckPath} --project 'devsecops-app' --scan './' --out . --format 'HTML' --format 'XML'"
+        } else {
+            error "OWASP Dependency-Check binary not found at ${dependencyCheckPath}"
+        }
+    }
+ }
+
+ }
+        
+    }
+```
 ### Stage-02 : Build and Junit test
 1. Defiine a stage as Build and Junit test 
 1. go to this site https://opensource.triology.de/jenkins/pipeline-syntax/
@@ -578,5 +650,5 @@ You applied your custom quality gate like : there should be zero ( bug, Vulnerab
 
 
 ### You can check other screenshot from this project below
-![](https://github.com/oshaye3/devsecops-project-first/master/screen-shot-devsecops.docx)
+![](https://github.com/oshaye3/devsecops-project-first/blob/master/screen-shot-devsecops.docx)
 
