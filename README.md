@@ -339,11 +339,6 @@ pipeline {
 ```
 
 ### Stage-01.1 : Pre-build, Checkov, TF infra deploy and OWASP
-1. Defiine a stage as git checkout
-1. go to this site https://opensource.triology.de/jenkins/pipeline-syntax/
-1. search for checkout: check out version control
-1. give your github url, branch and generate the pipeline synatx
-1. paste it into stage steps git check
 
 ```  sh 
      stage('Pre-Build') {
