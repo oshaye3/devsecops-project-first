@@ -578,5 +578,5 @@ You applied your custom quality gate like : there should be zero ( bug, Vulnerab
 
 
 ### You can check other screenshot from this project below
-![](https://github.com/oshaye3/devsecops-project-first/screen-shot-devsecops.docx)
+![](https://github.com/oshaye3/devsecops-project-first/master/screen-shot-devsecops.docx)
 
