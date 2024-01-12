@@ -644,6 +644,6 @@ You applied your custom quality gate like : there should be zero ( bug, Vulnerab
 ![](https://github.com/oshaye3/devsecops-project-first/blob/master/Images/slackop.png) 
 
 
-### You can check other screenshot from this project below
-![](https://github.com/oshaye3/devsecops-project-first/blob/master/screen-shot-devsecops.docx)
+### You can check other screen-shot-devsecops.docx from this project:
+https://github.com/oshaye3/devsecops-project-first/blob/master/screen-shot-devsecops.docx
 
