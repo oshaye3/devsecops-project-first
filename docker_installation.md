@@ -35,3 +35,7 @@ echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/doc
    ```sh 
     sudo usermod -aG docker $USER
    ```
+
+For MACOS
+
+For macOS, the installation steps for Docker differ because macOS does not use apt for package management. Instead, you can use Homebrew for the installation, or download Docker Desktop directly from the Docker website. Here’s how you can install Docker on macOS:

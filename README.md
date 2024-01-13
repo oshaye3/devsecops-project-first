@@ -315,7 +315,19 @@ Now copy the config file data and paste into jenkins > save
 ![](https://github.com/oshaye3/devsecops-project-first/blob/master/Images/slcakws.png)
 
 
+#  Make sure you have all your installations as below either in ~/.bash_profile or in ~/.zshrc
 
+```sh
+export JAVA_HOME=$(/usr/libexec/java_home)
+export JAVA_HOME="/usr/local/opt/openjdk@21"
+export PATH="$JAVA_HOME/bin:$PATH"
+export M2_HOME=/usr/local/Cellar/maven/3.9.6
+export PATH=$M2_HOME/bin:$PATH
+export PATH="/usr/local/bin/trivy:$PATH"
+export PATH="/usr/local/bin:$PATH"
+export VAULT_ADDR='http://127.0.0.1:8200'
+
+```
 # We integrated all the tools with Jenkins, Now Create a declarative jenkins  pipeline for each stage.
 
 ## Step: 3 Pipeline creation
