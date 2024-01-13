@@ -1,6 +1,6 @@
 # DevSecOps-Project
 
-In this project, I created an end-to-end CI/CD pipeline while keeping in mind Securities Best Practices, DevSecOps principles and used all these tools *Git, GitHub , Jenkins,Maven, Junit, SonarQube, Docker, Trivy, AWS S3, Docker Hub, Kubernetes , Slack and Hashicorp Vault,*  to achive the goal.
+In this project, I created an end-to-end CI/CD pipeline while keeping in mind Securities Best Practices, DevSecOps principles and used all these tools *Git, GitHub, Terraform, Checkov, OWASP, Jenkins,Maven, Junit, SonarQube, Docker, Trivy, AWS S3, Docker Hub, Kubernetes , Slack, Prometheus, Grafana and Hashicorp Vault,*  to achive the goal.
 
 
 ## Project Architecture application deployment
@@ -14,20 +14,37 @@ In this project, I created an end-to-end CI/CD pipeline while keeping in mind Se
 
 
 ## Pipeline flow only using the Project infra Architecture option 2 :
-1. Jenkins will fetch the code from the remote repo in the github
-2. The 
-2. Maven will build the code, if the build fails, the whole pipeline will become a failure and Jenkins will notify the user, If build success then 
-3. Junit will do unit testing, if the application passes test cases then will go to the next step otherwise the whole pipeline will become a failureJenkins will notify the user that your build fails.
-4.SonarQube scanner will scan the code and will send the report to the SonarQube server, where the report will go through the quality gate and gives the output to the web Dashboard. 
-                        In the quality gate, we define conditions or rules like how many bugs or vulnerabilities, or code smells should be present in the code. 
- Also, we have to create a webhook to send the status of quality gate status to Jenkins.
- If the quality gate status becomes a failure, the whole pipeline will become a failure then Jenkins will notify the user that your build fails.
-5. After the quality gate passes, Docker will build the docker image.
-if the docker build fails when the whole pipeline will become a failure and Jenkins will notify the user that your build fails.
-6. Trivy will scan the docker image, if it finds any Vulnerability then the whole pipeline will become a failure, and the generated report will be sent to s3 for future review and Jenkins will notify the user that your build fails.
-7. After trivy scan docker images will be pushed to the docker hub, if the docker fails to push docker images to the docker hub then the pipeline will become a failure and Jenkins will notify the user that your build fails.
-8. After the docker push, Jenkins will create deployment and service in minikube and our application will be deployed into Kubernetes.
-if Jenkins fails to create deployment and service in Kubernetes, the whole pipeline will become a failure and Jenkins will notify the user that your build fails.
+1. Source Code Retrieval: Jenkins checks out the source code from the specified GitHub repository to start the pipeline.
+
+2. Pre-Build Setup: The pre-build stage sets up the necessary environment variables, ensuring the correct Java SDK and Docker paths are in place.
+
+3. Infrastructure Code Analysis: Checkov performs static code analysis on the Terraform files within the backend modules to identify potential security issues.
+
+4. Infrastructure Provisioning: Terraform initializes and applies infrastructure changes to AWS, using credentials securely provided, and ensures the code is formatted and validated.
+
+5. Dependency Security Scan: The OWASP Dependency Check scans the project dependencies for security vulnerabilities, outputting reports in multiple formats.
+
+6. Code Compilation and Unit Testing: Maven compiles the code and JUnit performs unit tests. Successful tests result in publishing the test reports and code coverage metrics.
+
+7. Code Quality Analysis: SonarQube analyzes the codebase for quality issues. The results are measured against the configured quality gate criteria in SonarQube and made available on a dashboard.
+
+8. Containerization: A Docker image is built from the source code, ready for deployment.
+
+9. Security Scan of Container: The Docker image undergoes a vulnerability scan with Trivy, with the resulting report sent to an AWS S3 bucket for archival.
+
+10. Image Repository Push: The Docker image is pushed to Docker Hub, with credentials securely retrieved from Vault.
+
+11. Deployment to Kubernetes: The application is deployed to a Kubernetes cluster, completing the application's journey from code to deployment.
+
+12. Throughout this pipeline, Jenkins is configured to collect metrics on build times, success rates, and other relevant data. These metrics are exposed to Prometheus, which continuously scrapes and stores them. Grafana, in turn, is set up to retrieve this data from Prometheus, providing real-time visualization of the Jenkins pipeline's performance and health. This allows teams to monitor the pipeline's efficiency and troubleshoot issues quickly, promoting a more reliable CI/CD process.
+
+The integration with Prometheus and Grafana is typically achieved through Jenkins plugins and additional configuration in the Jenkins instance to expose the metrics. The detailed setup would involve:
+
+Installing and configuring the Prometheus plugin in Jenkins.
+Setting up a Prometheus server to scrape Jenkins metrics.
+Configuring Grafana to connect to Prometheus as a data source.
+Creating dashboards in Grafana to visualize the Jenkins pipeline metrics.
+The integration adds an observability layer to the pipeline, ensuring that any deviations from expected performance can be detected and addressed promptly.
 
 ### stage view to illustrate the flow of pipeline that is successful
 ![](https://github.com/oshaye3/Devsecops-project-first/blob/master/Images/stage-view.png)
