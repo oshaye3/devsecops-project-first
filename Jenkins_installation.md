@@ -57,7 +57,7 @@ echo 'export JAVA_HOME="/usr/lib/jvm/java-
 ```  
 Copy the 32-character alphanumeric password from the terminal and paste it into the Administrator password field, then click Continue.
 
-# Jenkins INSTAKLLATION
+# Jenkins INSTALLATION
 
 Step 2: Install Jenkins
 Add the Jenkins repository key to your system:
@@ -101,7 +101,9 @@ Copy the 32-character alphanumeric password from the terminal.
 Back in the web interface, paste this password into the "Administrator password" field and click "Continue".
 
 
-For macOS:
+# For macOS:
+
+
 Step 1: Install Homebrew (if not already installed)
 Homebrew is a package manager for macOS that simplifies the installation of software. Install it by running the following command in the terminal:
 
