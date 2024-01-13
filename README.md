@@ -1,6 +1,6 @@
 # DevSecOps-Project
 
-In this project, I created an end-to-end CI/CD pipeline while keeping in mind Securities Best Practices, DevSecOps principles and used all these tools *Git, GitHub, Terraform, Checkov, OWASP, Jenkins,Maven, Junit, SonarQube, Docker, Trivy, AWS S3, Docker Hub, Kubernetes , Slack, Prometheus, Grafana and Hashicorp Vault,*  to achive the goal.
+In this initiative, I meticulously engineered a comprehensive CI/CD pipeline, meticulously integrating Security Best Practices and DevSecOps methodologies. The pipeline incorporates a robust suite of tools including Git, GitHub, Terraform, Checkov, OWASP, Jenkins, Maven, JUnit, SonarQube, Docker, Trivy, AWS S3, Docker Hub, Kubernetes, Slack, Prometheus, Grafana, and HashiCorp Vault. This diverse technology stack was leveraged to successfully realize the project's objectives.
 
 
 ## Project Architecture application deployment
